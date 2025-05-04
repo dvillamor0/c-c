@@ -1,0 +1,35 @@
+services:
+  component-1:
+    image: mongo
+    restart: always
+    container_name: component-1
+    ports:
+      - "27017:27017"
+
+  component-2:
+    build: ./component-2
+    container_name: component-2
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./component-2/.env
+    depends_on:
+      - component-1
+
+  component-3:
+    image: mysql:8
+    container_name: component-3
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./component-3/.env
+
+  component-4:
+    build: ./component-4
+    container_name: component-4
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./component-4/.env
+    depends_on:
+      - component-3
